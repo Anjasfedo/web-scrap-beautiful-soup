@@ -4,11 +4,16 @@ import requests
 
 URL = "https://www.timesjobs.com/candidate/job-search.html?searchType=personalizedSearch&from=submit&searchTextSrc=&searchTextText=&txtKeywords=golang&txtLocation="
 
+print("Put some skill that not fammiliar")
+unfimmiliar_skill = input(">")
+print(f"Filtering out {unfimmiliar_skill}")
+
 html_text = requests.get(URL).text
 
 soup = BeautifulSoup(html_text, "lxml")
 
 jobs = soup.find_all("li", class_="clearfix job-bx wht-shd-bx")
+
 
 for job in jobs:
     published_date = job.find("span", class_="sim-posted").span.text
@@ -19,12 +24,13 @@ for job in jobs:
         skills = job.find("span", class_="srp-skills").text.replace(" ", "")
         
         more_info = job.header.h2.a["href"]
-    
-        print(f"Company Name: {company_name.strip()}")
-        print(f"Required Skills: {skills.strip()}")
-        print(f"More info: {more_info}")
         
-        print("")
+        if unfimmiliar_skill not in skills:
+            print(f"Company Name: {company_name.strip()}")
+            print(f"Required Skills: {skills.strip()}")
+            print(f"More info: {more_info}")
+            
+            print("")
     
     
 
